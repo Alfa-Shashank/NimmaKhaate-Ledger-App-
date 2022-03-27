@@ -108,7 +108,10 @@ public class DBHelper extends SQLiteOpenHelper {
             Cursor cursor1 = db.rawQuery("select user_id from users where username = ? and password = ?", new String[]{username, password});
             while (cursor1.moveToNext()) {
                 loginuserid = Integer.parseInt(cursor1.getString(0));
-                System.out.println("login userid: "+ loginuserid);
+                ContentValues v = new ContentValues();
+                v.put("userid",loginuserid);
+                db.insert("loginusers",null,v);
+//                System.out.println("login userid: "+ loginuserid);
             }
             return true;
         } else
@@ -122,6 +125,10 @@ public class DBHelper extends SQLiteOpenHelper {
         cv.put("customer_name",customername);
         cv.put("customer_number",customernumber);
 //        loginuserid = m.userid;
+        Cursor cur = db.rawQuery("select * from loginusers",null);
+        cur.moveToLast();
+        loginuserid = Integer.valueOf(cur.getString(0));
+        System.out.println("current user id is: "+loginuserid);
         cv.put("user_id",loginuserid);
 //        uncomment below lines for previous version
 //        cv.put("amttoget",0);
@@ -156,6 +163,9 @@ public class DBHelper extends SQLiteOpenHelper {
 //below method name changed from readdata to customerreaddata
     Cursor customerreaddata(){
         SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cur = db.rawQuery("select * from loginusers",null);
+        cur.moveToLast();
+        loginuserid = Integer.parseInt(cur.getString(0));
         if(db != null){
             Cursor cursor = db.rawQuery("select customer_id, customer_name, user_id from customers where user_id = ? group by customer_id", new String[]{String.valueOf(loginuserid)});
             return cursor;

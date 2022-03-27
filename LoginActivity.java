@@ -2,6 +2,7 @@ package com.example.nimmakhaate;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.ContentValues;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -41,6 +42,7 @@ public class LoginActivity extends AppCompatActivity {
                 else{
                     Boolean checkuser = DB.checkusernamepassword(user,pass);
                     if(checkuser == true){
+
                         Toast.makeText(LoginActivity.this,"Login Successful", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(LoginActivity.this,HomeActivity.class);
                         startActivity(intent);
